@@ -1,0 +1,127 @@
+/* make the scrool to appear in booking.uz.gov.ua div */
+#trainResult{overflow: scroll;}
+
+
+/* train image  */
+.parse-image img{
+	width:20%;
+ }
+
+/* ------------------- Mobile */
+@media screen and (max-width: 480px) { 
+ 
+  .parsse-image img{
+	 width:20%;
+   }
+	
+}
+/* ----------------END Mobile */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*------DONOR--(OLD)-- -----*/
+
+
+.footer {
+  /* position: absolute; */
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #efefef; /* #2ba6cb; */
+  text-align: center;
+}
+
+.red{color:red;}
+.border{border: 1px solid red; padding:15px;}
+.border-black{border: 1px solid black; padding:15px;}
+
+
+
+/* ---------------------Preloader, located in index.php, hidden by default */
+#overlay {
+	position:absolute;
+	top:16%;
+	display:none;
+}
+
+#overlay img {
+	width:33%;
+  }
+
+/* Mobile */
+@media screen and (max-width: 460px) {   
+  #overlay {
+	position:absolute;
+	top:37%; display:none;
+  }
+  
+  #overlay img {
+	width:70%;
+  }
+}
+/* END Mobile */
+/* END --------------------Preloader, located in index.php, hidden by default */
+
+
+
+
+/* Close cog */
+.close-it{position:absolute; top:0px; right:0px;color:black;}
+.close-it:hover{cursor:pointer; color:red;}
+
+
+/* Class that sets background-image */
+.head-style{
+	/* color:white; */
+	/* background-color:lavender; */
+	padding:10px;
+	background-image: url('');  /* url('../images/bg-pattern.jpg');  */
+	/* text-shadow: 1px 1px 2px black, 0 0 1em red; */   /* Shadow params */
+	
+	/* describes the animation behaviour */
+	-webkit-transition: all 1.5s ease;
+    -moz-transition: all 1.5s ease;
+    -o-transition: all 1.5s ease;
+     transition: all 1.5s ease;
+}
+/* END Class that sets background-image */
+
+
+
+
+
+
+
+
+
+.myShadow{
+    box-shadow: 10px 10px 5px grey;
+}
+ 
+.textShadow{ 
+    color: white; 
+	/* text-shadow: black 0.2em 0.1em 0.2em; */
+	text-shadow:
+    1px  1px 2px black,
+    1px -1px 2px black,
+   -1px  1px 2px black,
+   -1px -1px 2px black;	 
+} 
+
+
+
+
+
+
