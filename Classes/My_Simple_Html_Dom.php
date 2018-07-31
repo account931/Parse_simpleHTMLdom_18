@@ -5,16 +5,14 @@
 
 
 //Have some issue here with {findAllLinksAndImages()} if it si called onLoad from index.php, so it configured to work from ajax, not work onload 
-try{
-   include('../Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simpleHTMLdom Library Library
-} catch(Exception $e) {
-   include('../Library/simpleHTMLdom/simple_html_dom.php');
-}
+
+include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simpleHTMLdom Library Library
+
 
  class My_Simple_Html_Dom
  {
 	
-	//simple example finds all links
+	//simple example finds all links- NOT USED AS TRANSFERED TO AJAX, ajax_php/ajax_findAllLinksAndImages.php
 	// **************************************************************************************
     // **************************************************************************************
     // **                                                                                  **
@@ -211,9 +209,33 @@ try{
 
 
 
+    //<!------------------------------------------------CORE FUNCTION------------------------------------------------->
+	
+	
+	
+	
+	 function checkIfArgumentIsMethod($item)
+     {
+	   //foreach($item as $x){
+		   if (preg_match("/[(][)]/i", $item)) {  // if there is ()
+                echo "FOUND MATCH!!!!";
+			    //$result = substr($item, 0,-2);
+				//echo "CUT-> " . $result;
+				return true;
+			
+           } else {
+               echo "Not found";
+			   $result = $item;  //return without change
+			   return false;
+           }
+	   //}
+	       //return $result;
+   }
+	
+	
+	
 
-
-    // Core FUNCTION -> gets infro from anywhere, here we get Crs from http://waze.zzz.com.ua/support/web/
+    // CORE FUNCTION -> gets infro from anywhere, here we get Crs from http://waze.zzz.com.ua/support/web/
 	// **************************************************************************************
     // **************************************************************************************
     // **                                                                                  **
@@ -270,24 +292,39 @@ try{
 		  //CR's have structure <div class='accordion'> <h4>Head</h4> <p>text</p> </div>, so we add to array $wazeCannedR[] a new array with 2 elements($post(i.e <h4> content), $post->next_sibling()(i.e <p> following the <h4>)),
           
 		 /////!!!!!! RETURN, below is used without 3rd argument in function
-		 
+		 /*
 		  foreach($items_CR as $post) {
              $wazeCannedR[] = array($post->plaintext ,  //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}
                                     $post->next_sibling() );   //$post->children(6)->first_child()->outertext
          }
-         
+         */
 
+		   $v = '$post->' . $arrayOfNodes[1];
+		   echo "second => " . $arrayOfNodes[1] . " - " . $v  . "<br><br>";
 		 
-		 /* if use 3rd arg
-		   foreach($arrayOfNodes as $t){
-		   foreach($items_CR as $post) {
-             $wazeCannedR[] = array( $post->$t   ,  //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}
-                                     $post->$t );   //$post->children(6)->first_child()->outertext
-         }
-		 } 
-		  */ 
+		   //if use 3rd function argument $arrayOfNodes[]
+		   for($i = 0; $i < count($arrayOfNodes); $i++){
+			   $counter = $i + 1;
+			   $int = settype($counter,'integer');  //MUST set  to int as it'll crash
+			   
+			   //check if a 3rd argument array contains a method with ()
+			   //$this->checkIfArgumentIsMethod($arrayOfNodes[$int]);  //crash without $this->
+			   
+			   
+			                                                   
+		       foreach($items_CR as $post) { 
+			       //array with parsed data
+                   $wazeCannedR[] = array( $post->$arrayOfNodes[$i] ,    // i.e $post->plaintext
+
+				                           $post->$arrayOfNodes[$int]()   ); // i.e $post->next_sibling()  //mega ERROR, {$post->$arrayOfNodes[1]} DOES NOT WORK ->add()
+                                            //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}										   
+										   //$post->children(6)->first_child()->outertext
+										   
+               }    
+		   } 
 		  
 		  
+		  //var_dump($wazeCannedR);
 		   
           //Display CR results to Div
           foreach($wazeCannedR as $item) {
@@ -311,7 +348,84 @@ try{
 
 
 
+  //-- Without Function procedures--------------------------------------------------------------------------------------
+  /*
+  $wazeCannedR = array(); //array that will store all found CRs
+		
+   $html = new simple_html_dom();
+        //$html->load_file($page); //if file_get_content crashes, use CURL and then {$myHtml->load($resultX);}
+		  
+   $page= "http://waze.zzz.com.ua/support/web/";
+		  
+		  //CURL----------- 
+                          $myCurlWaze = curl_init();
+                          curl_setopt($myCurlWaze, CURLOPT_URL, $page);
+                          //curl_setopt($myCurlWaze, CURLOPT_POST, 1);  // $_POST['']
+                          //curl_setopt($myCurlWaze, CURLOPT_POSTFIELDS, urldecode(http_build_query($params))); //sends $_POST['']
+                          curl_setopt($myCurlWaze, CURLOPT_RETURNTRANSFER, true);
+                          curl_setopt($myCurlWaze, CURLOPT_SSL_VERIFYPEER, false);
+                          $resultWaze = curl_exec($myCurlWaze);
+						  
+						  //printing cURL info (time and url) (must be before {curl_close($myCurlWaze);})
+		                  $info = curl_getinfo($myCurlWaze);
+                          echo 'Took ' . $info['total_time'] . ' seconds for url ' . $info['url'] . "<br>";
+						  //close cURL
+                          curl_close($myCurlWaze);
+		  //END CURL----------
+		  
+		  
+		  //Check if no error in Curl_exec
+		  if ($resultWaze === FALSE) {
+              echo "cURL Error: " . curl_error($ch);
+          }
+		  //END Check if no error in Curl
+		  
+		  
 
+		  
+		  
+          $html->load($resultWaze);  //loads results from cuRL, if u can not use file_get_contents()
+          //$items_CR = $html->find('div[class=accordion]');  //finds core parent div
+		  $items_CR = $html->find( 'div[class=accordion] h4' );  //finds core parent div      
+		  
+		  //counts found <h4> inside <div class='accordion'>
+		  echo "Found h4 inside div[class=accordion] h4  => " . count($items_CR) . "<br><br><br>";  
+ 
+ 
+          //adds to array CR header + CR   //$articles = ( array("head1", "CR1"), array("head2", "CR2") );
+		  //we found and save to variable {$items_CR} all <h4> inside <div class='accordion'>
+		  //CR's have structure <div class='accordion'> <h4>Head</h4> <p>text</p> </div>, so we add to array $wazeCannedR[] a new array with 2 elements($post(i.e <h4> content), $post->next_sibling()(i.e <p> following the <h4>)),
+          
+		 /////!!!!!! RETURN, below is used without 3rd argument in function
+		 
+		  foreach($items_CR as $post) {
+             $wazeCannedR[] = array($post->plaintext ,  //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}
+                                    $post->next_sibling() );   //$post->children(6)->first_child()->outertext
+         }
+         
+
+			   
+			                                                   
+		       foreach($items_CR as $post) { 
+			       //array with parsed data
+                   $wazeCannedR[] = array( $post->plaintext ,    // i.e $post->plaintext
+				                           $post->next_sibling()   ); // i.e $post->next_sibling()  //mega ERROR, {$post->$arrayOfNodes[1]} DOES NOT WORK ->add()
+                                            //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}										   
+										   //$post->children(6)->first_child()->outertext
+										   
+               }    
+		   } 
+		  
+
+		   
+          //Display CR results to Div
+          foreach($wazeCannedR as $item) {
+            echo "<p>" . $item[0] . "<br>";
+            echo $item[1] .   "</p><br>";
+	    }		  
+		
+		*/
+  //-- End without Universal procedures-----------------------------------------------------------------------------------------------------------
 
 
 
