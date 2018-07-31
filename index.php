@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
   <html>
     <head>
@@ -69,23 +72,22 @@
     	     <div class="container">
 		   
 		   
-		   
+		         <!--------------------FORM----------------------------->
 		         <div class="col-sm-12 col-xs-12  mainX head-style" style="background-color:;">  <!-- myShadow -->
 				    <i class="	fa fa-bell-slash-o" style="font-size:40px"></i>  &nbsp;&nbsp; <br><br>
 				 
 				    <form class="form-inline" action="">
                           <div class="form-group">
 						      <label for="usr">URL:</label>
-                               <input type="text" id="myURLInput" value="enter URL" size="18" class="form-control"/><!-- enter URL to parse--> 
+                               <input type="text" id="myURLInput" value="" placeholder="your URL" size="18" class="form-control"/><!-- enter URL to parse--> 
   
-		                       <input type="button" value="Get" id="doParse" class="btn"/>							 
+		                       <input type="button" value="Get <img>/<a href>" id="doParse" class="btn"/>							 
                           </div>
-					</form>
-				 
-			        
-				   
+					</form>		        	   
 			     </div> <!--END  <div class="col-sm-4 col-xs-12 myShadow mainX-->
-				
+				<!-----------------END FORM----------------------------->
+				 
+				 
 				 
 				 
 				 <!-- JUST parse image-->
@@ -98,30 +100,57 @@
 				  
 				  
 				  
-				  <!------------------------------------------------Parse Core result-------------------------------------------------->
+				  
+				  
+				  <!----------------------------------------Parse  result_1, find all Links-------------------------------------------------->
 				  
 				  <div class="col-sm-12 col-xs-12 myShadow" id="trainResult" > <!-- div calc exchange-->
 				  
 				      <?php
-					      include('Classes/My_Simple_Html_Dom.php');
-					      //My_Simple_Html_Dom::runDom();
+					      //include('Classes/My_Simple_Html_Dom.php');  //delegated to autoload.php 
+						  include('Classes/autoload.php');
+						  echo "<h2> Find all links</h2>";
+						  //Method to find all links
+					      //My_Simple_Html_Dom::findAllLinksAndImages('https://code.tutsplus.com/');  //works!!!
 					  ?>
 				  </div> <!-- END class="row trainResult">-->
-				  <!---------------------------------------------------Parse Core result------------------------------------------------>
+				  <!----------------------------------------Parse  result------------------------------------------------>
 				  
 				  
 				  
 				  
-				    <!------------------------------------------------Parse Core result2-------------------------------------------------->
+				  
+				  
+				  
+				  
+				  <!--------------------------------------Parse  result2 Korrespondent.net----------------------------------------------------->
 				  
 				  <div class="col-sm-12 col-xs-12 myShadow" id="trainResult2" > <!-- div calc exchange-->
 				  
 				      <?php
 					     echo "<br><br></br><h2><center>Get articles from https://korrespondent.net/ukraine/</center></h2><br>";
-					      My_Simple_Html_Dom::parseAtricles();
+						 //Method to get articles from Korrespondent
+					     //My_Simple_Html_Dom::parseKorrespondentAtricles();  //works!!!
 					  ?>
 				  </div> <!-- END class="row trainResult">-->
-				  <!---------------------------------------------------Parse Core result2------------------------------------------------>
+				  <!---------------------------------------Parse  result2-------------------------------------------------------------------->
+				  
+				  
+				  
+				  
+				  
+				 <!------------------------------------Parse Core FUNCTION result3 http://waze.zzz.com.ua/support/web ------------------------------------>
+				  
+				  <div class="col-sm-12 col-xs-12 myShadow" id="trainResult3" > 
+				  
+				      <?php
+					     echo "<br><br></br><h2><center>http://waze.zzz.com.ua/support/web</center></h2><br>";
+						 //Method to get CR's from http://waze.zzz.com.ua/support/web/
+						 $library = new My_Simple_Html_Dom();
+					     $library->parseWazeCannedResponse('http://waze.zzz.com.ua/support/web/',  'div[class=accordion] h4',  array('plaintext', 'next_sibling()')  );
+					  ?>
+				  </div> <!-- END class="row trainResult">-->
+				  <!---------------------------------------------------Parse Core result3-------------------------------------------------------------------->
 				  
 				  
 				           

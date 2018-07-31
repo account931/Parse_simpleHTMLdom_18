@@ -1,6 +1,15 @@
 <?php
+
 //https://ruseller.com/lessons.php?rub=37&id=639
-include('Library/simpleHTMLdom/simple_html_dom.php');	 //include Library
+//http://simplehtmldom.sourceforge.net/manual.htm  - list of selectors
+
+
+//Have some issue here with {findAllLinksAndImages()} if it si called onLoad from index.php, so it configured to work from ajax, not work onload 
+try{
+   include('../Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simpleHTMLdom Library Library
+} catch(Exception $e) {
+   include('../Library/simpleHTMLdom/simple_html_dom.php');
+}
 
  class My_Simple_Html_Dom
  {
@@ -11,7 +20,7 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include Library
     // **                                                                                  **
     // **                                                                                  **
 	
-    public static function runDom()
+    public static function findAllLinksAndImages($targetURL)
 	{
 	                      
 					      $myHtml = new simple_html_dom(); //creates object of Library, included in ('Library/simpleHTMLdom/simple_html_dom.php');
@@ -19,25 +28,36 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include Library
                           // Load file from http://, it uses file_get_contents, so if it is not working, use CURL and load result to {$html->load($result);}
                           //$html->load_file('https://code.tutsplus.com/');
 						  
-						  //CURL
-						  $url = 'https://code.tutsplus.com/';  //https://code.tutsplus.com
+						  //CURL---------
+						  //$url = 'https://code.tutsplus.com/';  //https://code.tutsplus.com
                           $myCurl = curl_init();
-                          curl_setopt($myCurl, CURLOPT_URL, $url);
+                          curl_setopt($myCurl, CURLOPT_URL, $targetURL);
                           //curl_setopt($myCurl, CURLOPT_POST, 1);  // $_POST['']
                           //curl_setopt($myCurl, CURLOPT_POSTFIELDS, urldecode(http_build_query($params))); //sends $_POST['']
                           curl_setopt($myCurl, CURLOPT_RETURNTRANSFER, true);
                           curl_setopt($myCurl, CURLOPT_SSL_VERIFYPEER, false);
                           $result = curl_exec($myCurl);
                           curl_close($myCurl);
-						  //END CURL
+						  //END CURL------
 						  
 						  
-						  $myHtml->load($result);
+						  $myHtml->load($result); //load s result from curl
 						  //$single = $myHtml->find('#foo', 0);
-						  $collection = $myHtml->find('a'); //finds all <a href>
-						  echo $myHtml->save();
+						  $collectionURL = $myHtml->find('a'); //finds all <a href>
+						  $collectionImages = $myHtml->find('img'); //finds all <a href>
+						  //echo $myHtml->save(); //echo whole web page
 						  
+						  //loop through array of found links
+						  foreach($collectionURL as $links){
+							  echo $links . '<br>';  //text of Link
+							  echo $links->href . '<br><br>';  //href of link
+						  }
 						  
+						  //loop through array of found images
+						  foreach($collectionImages as $links2){
+							  echo $links2 . '<br>';  //text of Link
+							  echo $links2->src . '<br><br>';  //href of link
+						  }
 						  
 						  
 						  /*
@@ -73,7 +93,7 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include Library
     // **                                                                                  **
     // **                                                                                  **
 	
-    public static function parseAtricles()
+    public static function parseKorrespondentAtricles()
 	{
 		# глобальный массив, который будет заполняться информацией статьи
         $articles = array();
@@ -103,10 +123,12 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include Library
 		  //END CURL----------
 		  
           $html->load($resultX);
-          $items = $html->find('div[class=article_rubric_top]');    //article article_rubric_top   article__title   //col__main partition  //article_top
+          $items = $html->find('div[class=article_rubric_top]');    
+		  //.article article_rubric_top   .article__title   //.col__main partition  //.article_top
 		  //echo $html->save(); //will dispaly the whole page to div
 		  //echo $items;
     
+	     //adds to array news header + news   //$articles = ( array("head1", "news1"), array("head2", "news2")
          foreach($items as $post) {
              $articles[] = array($post->children(0) ,
                                   $post->children(2) );   //$post->children(6)->first_child()->outertext
@@ -160,7 +182,7 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include Library
    
    
    
-   //getArticles('https://korrespondent.net/ukraine/');
+   getArticles('https://korrespondent.net/ukraine/');
    
    
    
@@ -175,10 +197,127 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include Library
     // **                                                                                  **
     // **************************************************************************************
     // **************************************************************************************	
+	//End gets  news from korrespondent.net	
 		
 		
+	
+
+
+
+
+
+
+
+
+
+
+
+
+    // Core FUNCTION -> gets infro from anywhere, here we get Crs from http://waze.zzz.com.ua/support/web/
+	// **************************************************************************************
+    // **************************************************************************************
+    // **                                                                                  **
+    // **                                                                                  **
+	
+    public function parseWazeCannedResponse($myURL, $myTargetDiv, $arrayOfNodes)
+	//params(url to parse, $myTargetDiv = what div to find, $arrayOfNodes = of what nodes'content we have to add to array(NOT USED)
+	{
+		
+		$wazeCannedR = array(); //array that will store all found CRs
+		
+		$html = new simple_html_dom();
+        //$html->load_file($page); //if file_get_content crashes, use CURL and then {$myHtml->load($resultX);}
+		  
+		//$page= "http://waze.zzz.com.ua/support/web/";
+		  
+		  //CURL----------- 
+                          $myCurlWaze = curl_init();
+                          curl_setopt($myCurlWaze, CURLOPT_URL, $myURL);
+                          //curl_setopt($myCurlWaze, CURLOPT_POST, 1);  // $_POST['']
+                          //curl_setopt($myCurlWaze, CURLOPT_POSTFIELDS, urldecode(http_build_query($params))); //sends $_POST['']
+                          curl_setopt($myCurlWaze, CURLOPT_RETURNTRANSFER, true);
+                          curl_setopt($myCurlWaze, CURLOPT_SSL_VERIFYPEER, false);
+                          $resultWaze = curl_exec($myCurlWaze);
+						  
+						  //printing cURL info (time and url) (must be before {curl_close($myCurlWaze);})
+		                  $info = curl_getinfo($myCurlWaze);
+                          echo 'Took ' . $info['total_time'] . ' seconds for url ' . $info['url'] . "<br>";
+						  //close cURL
+                          curl_close($myCurlWaze);
+		  //END CURL----------
+		  
+		  
+		  //Check if no error in Curl_exec
+		  if ($resultWaze === FALSE) {
+              echo "cURL Error: " . curl_error($ch);
+          }
+		  //END Check if no error in Curl
+		  
+		  
+
+		  
+		  
+          $html->load($resultWaze);  //loads results from cuRL, if u can not use file_get_contents()
+          //$items_CR = $html->find('div[class=accordion]');  //finds core parent div
+		  $items_CR = $html->find( $myTargetDiv/* 'div[class=accordion] h4' */ );  //finds core parent div      
+		  
+		  //counts found <h4> inside <div class='accordion'>
+		  echo "Found " /* h4 inside div[class=accordion] h4 */ . $myTargetDiv .  " => " . count($items_CR) . "<br><br><br>";  
+ 
+ 
+          //adds to array CR header + CR   //$articles = ( array("head1", "CR1"), array("head2", "CR2") );
+		  //we found and save to variable {$items_CR} all <h4> inside <div class='accordion'>
+		  //CR's have structure <div class='accordion'> <h4>Head</h4> <p>text</p> </div>, so we add to array $wazeCannedR[] a new array with 2 elements($post(i.e <h4> content), $post->next_sibling()(i.e <p> following the <h4>)),
+          
+		 /////!!!!!! RETURN, below is used without 3rd argument in function
+		 
+		  foreach($items_CR as $post) {
+             $wazeCannedR[] = array($post->plaintext ,  //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}
+                                    $post->next_sibling() );   //$post->children(6)->first_child()->outertext
+         }
+         
+
+		 
+		 /* if use 3rd arg
+		   foreach($arrayOfNodes as $t){
+		   foreach($items_CR as $post) {
+             $wazeCannedR[] = array( $post->$t   ,  //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}
+                                     $post->$t );   //$post->children(6)->first_child()->outertext
+         }
+		 } 
+		  */ 
+		  
+		  
+		   
+          //Display CR results to Div
+          foreach($wazeCannedR as $item) {
+            echo "<p>" . $item[0] . "<br>";
+            echo $item[1] .   "</p><br>";
+	    }		  
 		
 		
+	
+	}
+		
+		
+	// **                                                                                  **
+    // **                                                                                  **
+    // **************************************************************************************
+    // **************************************************************************************	
+		
+
+
+
+
+
+
+
+
+
+
+
+
+	
 }
 
 
