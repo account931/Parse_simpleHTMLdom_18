@@ -147,7 +147,7 @@ session_start();
 					     echo "<br><br></br><h2><center>http://waze.zzz.com.ua/support/web</center></h2><br>";
 						 //Method to get CR's from http://waze.zzz.com.ua/support/web/
 						 $library = new My_Simple_Html_Dom();
-					     $library->parseWazeCannedResponse('http://waze.zzz.com.ua/support/web/',  'div[class=accordion] h4',  array('plaintext', 'next_sibling()')  );
+					     $library->parseWazeCannedResponse('http://waze.zzz.com.ua/support/web/',  'div[class=accordion] h4',  array('plaintext', 'next_sibling')  );
 					  ?>
 				  </div> <!-- END class="row trainResult">-->
 				  <!---------------------------------------------------Parse Core result3-------------------------------------------------------------------->
