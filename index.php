@@ -141,10 +141,10 @@ session_start();
 				  
 				 <!------------------------------------Parse Core UNIVERSAL FUNCTION result3 http://waze.zzz.com.ua/support/web ------------------------------------>
 				  
-				  <div class="col-sm-12 col-xs-12 myShadow" id="trainResult3" > 
+				  <div class="col-sm-12 col-xs-12 myShadow" id="trainResult3"> 
 				  
 				      <?php
-					     echo "<br><br></br><h2><center>http://waze.zzz.com.ua/support/web</center></h2><br>";
+					     echo "<br><br><br><h2><center>http://waze.zzz.com.ua/support/web</center></h2><br>";
 						 //Method to get CR's from http://waze.zzz.com.ua/support/web/
 						 $library = new My_Simple_Html_Dom();
 					     $library->myCoreFunctParseAnyResource('http://waze.zzz.com.ua/support/web/',  'div[class=accordion] h4',  array('plaintext', 'next_sibling()')  );
