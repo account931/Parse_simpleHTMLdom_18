@@ -203,20 +203,10 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 
 
 
-
-
-
-
 	
 	
 	
-
-
-    //<!------------------------------------------------THE MOST CORE FUNCTION------------------------------------------------->
-	
-	
-	
-	
+	// NOT USED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	 function checkIfArgumentIsMethod($item)
      {
 	   //foreach($item as $x){
@@ -234,6 +224,23 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 	   //}
 	       //return $result;
    }
+	//NOT USED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	
+	
+
+
+
+
+	
+	
+	
+
+
+    //<!------------------------------------------------THE MOST CORE FUNCTION------------------------------------------------->
+	
+	
+	
 	
 	
 	
@@ -248,7 +255,7 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
     // **                                                                                  **
     // **                                                                                  **
 	
-    public function myCoreFunctParseAnyResource($myURL, $myTargetDiv, $arrayOfNodesToGet )
+    public function myCoreFunctParseAnyResource($myURL, $myTargetDiv, $arrayOfNodesToGet )  //$arrayOfNodesToGet=array('plaintext', 'plaintext')
 	//arguments($myURL = url to parse, $myTargetDiv = what div to find for start parsing, $arrayOfNodesToGet = from what web page's nodes  we have to parse content and add it to array)
 
 	{
@@ -292,7 +299,7 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 		  $items_CR = $html->find( $myTargetDiv/* 'div[class=accordion] h4' */ );  //finds core parent div      
 		  
 		  //counts found <h4> inside <div class='accordion'>
-		  echo "Found " /* h4 inside div[class=accordion] h4 */ . $myTargetDiv .  " => " . count($items_CR) . "<br><br><br>";  
+		  echo "Found " /* h4 inside div[class=accordion] h4 */ . $myTargetDiv .  " => " . count($items_CR) . "<br>";  
  
  
           //adds to array CR header + CR   //$articles = ( array("head1", "CR1"), array("head2", "CR2") );
@@ -309,7 +316,7 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 
 		   //just for information
 		   $v = '$post->' . $arrayOfNodesToGet[1];
-		   echo "second => " . $arrayOfNodesToGet[1] . " - " . $v  . "<br><br>";
+		   echo "second => " . $arrayOfNodesToGet[1] . " - " . $v  . "<br><br><br><br>";
 		   
 		   
 		 
@@ -367,15 +374,16 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 		
 		
 		
-			/*	
-		  # посмотрим, есть ли следующая страница
+				
+		  // checks if next page button exists
+		  /*
           if($next = $html->find('li[class=next]', 0)) {
                 $URL = $next->children(0)->href;
                 echo "going on to $URL <<<\n";
                 # подчищаем утечки памяти
                 $html->clear();
                 unset($html);
-                $library->myCoreFunctParseAnyResource('http://waze.zzz.com.ua/support/web/',  'div[class=accordion] h4',  array('plaintext', 'next_sibling')  );
+                $this->myCoreFunctParseAnyResource('http://waze.zzz.com.ua/support/web/',  'div[class=accordion] h4',  array('plaintext', 'next_sibling')  );
           }
 	      */
 	
@@ -503,4 +511,4 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 
 
 
-?>
+?>>
