@@ -6,7 +6,6 @@
 //include('../Classes/My_Simple_Html_Dom.php');
 include('../Library/simpleHTMLdom/simple_html_dom.php');
 
-//$_SESSION['flag'] = 1;
 
 
 
@@ -16,8 +15,9 @@ include('../Library/simpleHTMLdom/simple_html_dom.php');
 
 
 
- function findAllLinksAndImages($targetURL)
-	{
+ //gets all <img><a> for URL from your input, triggered by js/myParse-core.js with function {contact_php_findAllLinksAndImages()}
+ function findAllLinksAndImages($targetURL)  //$targetURL is your input, sent from ajax by js/myParse-core.js with function {contact_php_findAllLinksAndImages()}
+ {
 	                      
 					      $myHtml = new simple_html_dom(); //creates object of Library, included in ('Library/simpleHTMLdom/simple_html_dom.php');
                           
@@ -76,8 +76,8 @@ include('../Library/simpleHTMLdom/simple_html_dom.php');
 
 
 
-
-findAllLinksAndImages($_POST['serverUrl']);
+                         //gets all <img><a> for URL from your input, call the function
+                         findAllLinksAndImages($_POST['serverUrl']);
 
 
 

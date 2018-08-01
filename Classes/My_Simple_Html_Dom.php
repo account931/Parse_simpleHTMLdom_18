@@ -207,9 +207,12 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 
 
 
+	
+	
+	
 
 
-    //<!------------------------------------------------CORE FUNCTION------------------------------------------------->
+    //<!------------------------------------------------THE MOST CORE FUNCTION------------------------------------------------->
 	
 	
 	
@@ -235,17 +238,22 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 	
 	
 
-    // CORE FUNCTION -> gets infro from anywhere, here we get Crs from http://waze.zzz.com.ua/support/web/
+    // THE MOST CORE UNIVERSAL FUNCTION -> gets infro from anywhere, just call it with 3 relevant arguments, here we get Crs from http://waze.zzz.com.ua/support/web/
+	//designed to get/display 2 elements
+	//Example how to use
+	//new My_Simple_Html_Dom()->myCoreFunctParseAnyResource('http://waze.zzz.com.ua/support/web/',  'div[class=accordion] h4',  array('plaintext', 'next_sibling')  );
+	//new My_Simple_Html_Dom()->myCoreFunctParseAnyResource('https://korrespondent.net/ukraine/',  'div[class=article_rubric_top]',  array('children', 'children')  );  
 	// **************************************************************************************
     // **************************************************************************************
     // **                                                                                  **
     // **                                                                                  **
 	
-    public function parseWazeCannedResponse($myURL, $myTargetDiv, $arrayOfNodes)
-	//params(url to parse, $myTargetDiv = what div to find, $arrayOfNodes = of what nodes'content we have to add to array(NOT USED)
+    public function myCoreFunctParseAnyResource($myURL, $myTargetDiv, $arrayOfNodesToGet )
+	//arguments($myURL = url to parse, $myTargetDiv = what div to find for start parsing, $arrayOfNodesToGet = from what web page's nodes  we have to parse content and add it to array)
+
 	{
 		
-		$wazeCannedR = array(); //array that will store all found CRs
+		$array_with_allParsedData = array(); //array that will store all found CRs
 		
 		$html = new simple_html_dom();
         //$html->load_file($page); //if file_get_content crashes, use CURL and then {$myHtml->load($resultX);}
@@ -263,7 +271,7 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 						  
 						  //printing cURL info (time and url) (must be before {curl_close($myCurlWaze);})
 		                  $info = curl_getinfo($myCurlWaze);
-                          echo 'Took ' . $info['total_time'] . ' seconds for url ' . $info['url'] . "<br>";
+                          echo '<h4>It took simpleHTMLDom Library <span class="red">' . $info['total_time'] . ' seconds </span> to proccess url <span class="red"> ' . $info['url'] . "</span></h4><br>";
 						  //close cURL
                           curl_close($myCurlWaze);
 		  //END CURL----------
@@ -289,50 +297,87 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
  
           //adds to array CR header + CR   //$articles = ( array("head1", "CR1"), array("head2", "CR2") );
 		  //we found and save to variable {$items_CR} all <h4> inside <div class='accordion'>
-		  //CR's have structure <div class='accordion'> <h4>Head</h4> <p>text</p> </div>, so we add to array $wazeCannedR[] a new array with 2 elements($post(i.e <h4> content), $post->next_sibling()(i.e <p> following the <h4>)),
+		  //CR's have structure <div class='accordion'> <h4>Head</h4> <p>text</p> </div>, so we add to array $array_with_allParsedData[] a new array with 2 elements($post(i.e <h4> content), $post->next_sibling()(i.e <p> following the <h4>)),
           
 		 /////!!!!!! RETURN, below is used without 3rd argument in function
 		 /*
 		  foreach($items_CR as $post) {
-             $wazeCannedR[] = array($post->plaintext ,  //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}
+             $array_with_allParsedData[] = array($post->plaintext ,  //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}
                                     $post->next_sibling() );   //$post->children(6)->first_child()->outertext
          }
          */
 
-		   $v = '$post->' . $arrayOfNodes[1];
-		   echo "second => " . $arrayOfNodes[1] . " - " . $v  . "<br><br>";
+		   //just for information
+		   $v = '$post->' . $arrayOfNodesToGet[1];
+		   echo "second => " . $arrayOfNodesToGet[1] . " - " . $v  . "<br><br>";
+		   
+		   
 		 
-		   //if use 3rd function argument $arrayOfNodes[]
-		   for($i = 0; $i < count($arrayOfNodes); $i++){
+		   //if use 3rd function argument $arrayOfNodesToGet[]
+		   for($i = 0; $i < count($arrayOfNodesToGet); $i++){
 			   $counter = $i + 1;
 			   $int = settype($counter,'integer');  //MUST set  to int as it'll crash
 			   
 			   //check if a 3rd argument array contains a method with ()
-			   //$this->checkIfArgumentIsMethod($arrayOfNodes[$int]);  //crash without $this->
+			   //$this->checkIfArgumentIsMethod($arrayOfNodesToGet[$int]);  //crash without $this->
 			   
 			   
-			                                                   
-		       foreach($items_CR as $post) { 
+			    //add parsed data to array {$array_with_allParsedData[]}                                             
+		       foreach($items_CR as $post) {   
+			   
+			   ///screw
+			   /*
+			    $s = '$post->' . $arrayOfNodesToGet[1];  
+			    $j = $post->next_sibling(); // $post->$arrayOfNodesToGet[$int];  echo "eval- > ". $s . "<br>";
+			    $number = '$post->'.$arrayOfNodesToGet[$int];
+                echo 'NN -> '.eval('return '. $number.';') . "<br>";  
+				*/
+			   //screw
+			   
 			       //array with parsed data
-                   $wazeCannedR[] = array( $post->$arrayOfNodes[$i] ,    // i.e $post->plaintext
-
-				                           $post->$arrayOfNodes[$int]()   ); // i.e $post->next_sibling()  //mega ERROR, {$post->$arrayOfNodes[1]} DOES NOT WORK ->add()
-                                            //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}										   
-										   //$post->children(6)->first_child()->outertext
+                   $array_with_allParsedData[] = array( eval('return '. '$post->'.$arrayOfNodesToGet[$i].';'),      // i.e $post->plaintext //$post->$arrayOfNodesToGet[$i]
+                                                        eval('return '. '$post->'.$arrayOfNodesToGet[$int].';')    //$post->$arrayOfNodesToGet[$int] // i.e $post->next_sibling()  //mega ERROR, {$post->$arrayOfNodesToGet[1]} DOES NOT WORK ->add{()}
+													   ); 
+				   //MEGA TOUGHEST PART -> should use {eval('return '. '$post->'.$arrayOfNodesToGet[$int].';')} instead of {$post->$arrayOfNodesToGet[$int]}, 
+				   // as 2nd variant will crash if the 3rd argument in function is with(), i.e array('plaintext', 'next_sibling()')
+					
+                   //explain for above-> e.g <h4>content = $post, to get next tag after <h4> = $post->next_sibling(), to get 1st<p> inside<h4> = $post->children(0), to get <span> in <h4><p><span></span></p></h4> = $post->children(6)->first_child()
+				   //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}										   
+				   //$post->children(6)->first_child()->outertext
 										   
                }    
-		   } 
+		   } //end for
 		  
 		  
-		  //var_dump($wazeCannedR);
-		   
+		  
+		  
+		  	
+		
+		
+		
+		  
+		  
+		  
+		  //var_dump($array_with_allParsedData);
           //Display CR results to Div
-          foreach($wazeCannedR as $item) {
+          foreach($array_with_allParsedData as $item) {
             echo "<p>" . $item[0] . "<br>";
             echo $item[1] .   "</p><br>";
-	    }		  
+	      }		  
 		
 		
+		
+			/*	
+		  # посмотрим, есть ли следующая страница
+          if($next = $html->find('li[class=next]', 0)) {
+                $URL = $next->children(0)->href;
+                echo "going on to $URL <<<\n";
+                # подчищаем утечки памяти
+                $html->clear();
+                unset($html);
+                $library->myCoreFunctParseAnyResource('http://waze.zzz.com.ua/support/web/',  'div[class=accordion] h4',  array('plaintext', 'next_sibling')  );
+          }
+	      */
 	
 	}
 		
@@ -341,16 +386,28 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
     // **                                                                                  **
     // **************************************************************************************
     // **************************************************************************************	
+	//MOST CORE UNIVERSAL FUNCTION -> gets infro from anywhere,	
+
+
+
+
+		
+		
+		public function b(){
+	
+		}
+		
+		
+		
+		
+		
 		
 
 
-
-
-
-
-  //-- Without Function procedures--------------------------------------------------------------------------------------
+  //-- simpleHTMLDom Library sample Without Function procedures--------------------------------------------------------------------------------------
   /*
-  $wazeCannedR = array(); //array that will store all found CRs
+  echo "<h2> Sample without function</h2>";
+  $array_with_allParsedData = array(); //array that will store all found CRs
 		
    $html = new simple_html_dom();
         //$html->load_file($page); //if file_get_content crashes, use CURL and then {$myHtml->load($resultX);}
@@ -394,41 +451,48 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
  
           //adds to array CR header + CR   //$articles = ( array("head1", "CR1"), array("head2", "CR2") );
 		  //we found and save to variable {$items_CR} all <h4> inside <div class='accordion'>
-		  //CR's have structure <div class='accordion'> <h4>Head</h4> <p>text</p> </div>, so we add to array $wazeCannedR[] a new array with 2 elements($post(i.e <h4> content), $post->next_sibling()(i.e <p> following the <h4>)),
+		  //CR's have structure <div class='accordion'> <h4>Head</h4> <p>text</p> </div>, so we add to array $array_with_allParsedData[] a new array with 2 elements($post(i.e <h4> content), $post->next_sibling()(i.e <p> following the <h4>)),
           
 		 /////!!!!!! RETURN, below is used without 3rd argument in function
 		 
 		  foreach($items_CR as $post) {
-             $wazeCannedR[] = array($post->plaintext ,  //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}
+             $array_with_allParsedData[] = array($post->plaintext ,  //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}
                                     $post->next_sibling() );   //$post->children(6)->first_child()->outertext
          }
          
 
-			   
-			                                                   
-		       foreach($items_CR as $post) { 
-			       //array with parsed data
-                   $wazeCannedR[] = array( $post->plaintext ,    // i.e $post->plaintext
-				                           $post->next_sibling()   ); // i.e $post->next_sibling()  //mega ERROR, {$post->$arrayOfNodes[1]} DOES NOT WORK ->add()
-                                            //i.e <h4> content //use ->plaintext to remove image from content //use {->innertext()}to removes formatting, like borders // was {$post->children(1)}, here we take just {$post}, h4 content itself a sit was found in {->find('div[class=accordion] h4')}										   
-										   //$post->children(6)->first_child()->outertext
-										   
-               }    
-		   } 
-		  
-
 		   
           //Display CR results to Div
-          foreach($wazeCannedR as $item) {
+          foreach($array_with_allParsedData as $item) {
             echo "<p>" . $item[0] . "<br>";
             echo $item[1] .   "</p><br>";
-	    }		  
+		  }
 		
 		*/
-  //-- End without Universal procedures-----------------------------------------------------------------------------------------------------------
+  //-- simpleHTMLDom Library sample Without Function procedures-----------------------------------------------------------------------------------------------------------
 
 
-
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
 
 
 	

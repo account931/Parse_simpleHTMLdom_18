@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	
-	
+	//on button click gets all <img><a> for URL from your input
 	$("#doParse").click(function() {   // $(document).on("click", '.circle', function() {   // this  click  is  used  to   react  to  newly generated cicles;
         
 		contact_php_findAllLinksAndImages();
@@ -11,6 +11,7 @@ $(document).ready(function(){
 	
 	
 	// Core action which sends ajax to Classes/My_Simple_Html_Dom/findAllLinksAndImages($targetURL)  onClick
+	// sends ajax to gets all <img><a> for URL from your input
 	// **************************************************************************************
     // **************************************************************************************
     //                                                                                     **

@@ -1,17 +1,26 @@
-App to parse web
- 
- How it works:
+App to parse web content
+
+# function myCoreFunctParseAnyResource($myURL, $myTargetDiv, $arrayOfNodesToGet ) is CORE UNIVERSAL, gets info from anywhere, just call it with 3 relevant arguments
+# myCoreFunctParseAnyResource arguments($myURL = url to parse, $myTargetDiv = what div to find for start parsing, $arrayOfNodesToGet = from what web page's nodes  we have to parse content and add it to array)
+# Examples to call function//Example how to use
+	//new My_Simple_Html_Dom()->myCoreFunctParseAnyResource('http://waze.zzz.com.ua/support/web/',  'div[class=accordion] h4',  array('plaintext', 'next_sibling')  );
+	//new My_Simple_Html_Dom()->myCoreFunctParseAnyResource('https://korrespondent.net/ukraine/',  'div[class=article_rubric_top]',  array('children(0)', 'children(2)')  );
+
+	
+//-----------------------------------------------------------
+
+ General informaion:
 1.Uses Library Php simpleHTMLdom, shoul include one fille to work ->  simpleHTMLdom/simple_html_dom.php
 2. Logic located in Classes/My_Simple_Html_Dom.php. This Class includes methods:
    2.1 function findAllLinksAndImages($targetURL), finds images and urls, works onClick only (enter desired URL in input)
    2.2 function parseKorrespondentAtricles(), gets news articles from korrespondent.net, disabled, in order to turn on, uncomment it in index.php in section {result2 Korrespondent.net}
-   2.3 function parseWazeCannedResponse($myURL, $myTargetDiv, $arrayOfNodes), gets CR from waze.zzz.com.ua/support, it is going to be configurable
+   2.3 
    
    
    
-   //-----------------------------------------------------------
+//-----------------------------------------------------------
    
-How it generally simpleHTMLdom Library works
+How generally simpleHTMLdom Library works
 1. include simpleHTMLdom/simple_html_dom.php
 2. $html = new simple_html_dom();
 2. Use $html->load_file($url) to load page, it uses file_get_contents() and if it does not work due server settings use cURL to get the sane result2
@@ -38,3 +47,7 @@ How it generally simpleHTMLdom Library works
 	                      }
 						  
 7. I f u want to display the whole parsed page use -> /echo $html->save();
+
+
+
+//------------------------------------------------------------------------------------
