@@ -10,12 +10,41 @@
 /* ------------------- Mobile */
 @media screen and (max-width: 480px) { 
  
-  .parsse-image img{
+  .parse-image img{
 	 width:20%;
    }
 	
 }
 /* ----------------END Mobile */
+
+
+
+
+/* ----Break long word --*/
+*{
+ word-wrap: break-word;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

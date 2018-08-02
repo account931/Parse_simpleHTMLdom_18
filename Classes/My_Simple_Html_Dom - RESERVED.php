@@ -1,5 +1,4 @@
 <?php
-//namespace Some\Path\To\Controller;
 
 //https://ruseller.com/lessons.php?rub=37&id=639
 //http://simplehtmldom.sourceforge.net/manual.htm  - list of selectors
@@ -207,25 +206,25 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 	
 	
 	
- // Checks is argument contains{()}, we will use it later in loop to decide whethre to imply eval() or not 
+	// NOT USED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	 function checkIfArgumentIsMethod($item)
      {
 	   //foreach($item as $x){
 		   if (preg_match("/[(].*[)]/i", $item)) {  // if there is (),it may contain something inside or not (.*), ie it will match () and (2)
-                echo "FOUND MATCH!!!!<br>";
+                echo "<br>FOUND MATCH!!!!";
 			    //$result = substr($item, 0,-2);
 				//echo "CUT-> " . $result;
 				return true;
 			
            } else {
-              echo "Not found<br>";
+              echo "<br>Not found";
 			   //$result = $item;  //return without change
 			   return false;
            }
 	   //}
 	       //return $result;
    }
-	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//NOT USED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	
 	
 	
@@ -320,12 +319,9 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 		   echo "second => " . $arrayOfNodesToGet[1] . " - " . $v  . "<br><br><br><br>";
 		   
 		   
-		   
-		   
-		   
-		    //BIG LOOP START !!!!!!!!!!!!
+		 
 		   //if use 3rd function argument $arrayOfNodesToGet[]
-		   for($i = 0; $i < count($arrayOfNodesToGet); $i++){  //count($arrayOfNodesToGet)   //for($i = 0; $i < count($arrayOfNodesToGet); $i++)
+		   for($i = 0; $i < count($arrayOfNodesToGet); $i++){
 			   $counter = $i + 1;
 			   $int = settype($counter,'integer');  //MUST set  to int as it'll crash
 			   
@@ -346,23 +342,20 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 			   //screw
 			   
 			   
-			      //checking if we have to apply eval to array elem, i.e if it contains {()}, if not returns without eval()
-			      for($i = 0; $i < count($arrayOfNodesToGet); $i++){
-			          if($this->checkIfArgumentIsMethod( '$post->'.$arrayOfNodesToGet[$i])){
-					      $nodes1 = eval('return '. '$post->'.$arrayOfNodesToGet[$i].';'  );
-					  } else {
-					      $nodes1= $post->$arrayOfNodesToGet[$i];
-				      }					   
-				
+			       if($this->checkIfArgumentIsMethod( '$post->'.$arrayOfNodesToGet[$i])){
+					   $nodes1 = eval('return '. '$post->'.$arrayOfNodesToGet[$i].';'  );
+					 
+				   } else {
+					   $nodes1= $post->$arrayOfNodesToGet[$i];
+				   }					   
 				
 			   
-			          //array with parsed data
-                      $array_with_allParsedData[] = array( 
+			       //array with parsed data
+                   $array_with_allParsedData[] = array( 
+				         
 				                $nodes1 , //eval('return '. '$post->'.$arrayOfNodesToGet[$i].';'  ),      // i.e $post->plaintext //$post->$arrayOfNodesToGet[$i]
-                                //eval('return '. '$post->'.$arrayOfNodesToGet[$int].';')    //$post->$arrayOfNodesToGet[$int] // i.e $post->next_sibling()  //mega ERROR, {$post->$arrayOfNodesToGet[1]} DOES NOT WORK ->add{()}
-				  	   ); 
-					
-				  }
+                                eval('return '. '$post->'.$arrayOfNodesToGet[$int].';')    //$post->$arrayOfNodesToGet[$int] // i.e $post->next_sibling()  //mega ERROR, {$post->$arrayOfNodesToGet[1]} DOES NOT WORK ->add{()}
+				  	); 
 			  
 				   //MEGA TOUGHEST PART -> should use {eval('return '. '$post->'.$arrayOfNodesToGet[$int].';')} instead of {$post->$arrayOfNodesToGet[$int]}, 
 				   // as 2nd variant will crash if the 3rd argument in function is with(), i.e array('plaintext', 'next_sibling()')
@@ -386,19 +379,13 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 		  
 		  //var_dump($array_with_allParsedData);
           //Display CR results to Div
-		  for($i = 0; $i < count($array_with_allParsedData); $i++){  //iterats over found lements legth
+		  for($i = 0; $i < count($array_with_allParsedData); $i++){
           //foreach($array_with_allParsedData as $item) {
-			  
-			  //adds a  distance between 2 blocks
-			  if($i%2==0){
-				  echo " <br> <br> ";
-			  }
-			  
-			  for($k = 0; $k < count($arrayOfNodesToGet); $k++){    //iterats over 3rd argument length
+			  echo "<br>";
+			  for($k = 0; $k < count($arrayOfNodesToGet); $k++){
                   echo "<p>" . $array_with_allParsedData[$i][$k] . "</p>";
                   //echo $array_with_allParsedData[$i][1] .   "</p><br>";
 			  }
-			   
 	      }		  
 		
 		

@@ -152,7 +152,7 @@ session_start();
 						
 						 
 						 //working Korrespondent example below, just have to fix in {foreach($items_CR as $post) { array( $post->$arrayOfNodesToGet[$i] +(0) ,$post->$arrayOfNodesToGet[$int](2) }
-						 //$library->myCoreFunctParseAnyResource('https://korrespondent.net/ukraine/',  'div[class=article_rubric_top]',  array('children(0)', 'children(2)')  );  
+						 //$library->myCoreFunctParseAnyResource('https://korrespondent.net/ukraine/',  'div[class=article_rubric_top]',  array('children(0)', 'children(2)',  'children(3)', 'children(1)->children(1)' )  );  
 						 
 					  ?>
 				  </div> <!-- END class="row trainResult">-->
