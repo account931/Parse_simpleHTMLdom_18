@@ -347,22 +347,25 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 			   
 			   
 			      //checking if we have to apply eval to array elem, i.e if it contains {()}, if not returns without eval()
-			      for($i = 0; $i < count($arrayOfNodesToGet); $i++){
-			          if($this->checkIfArgumentIsMethod( '$post->'.$arrayOfNodesToGet[$i])){
-					      $nodes1 = eval('return '. '$post->'.$arrayOfNodesToGet[$i].';'  );
+				  $subArrayWithNodes = array();  //a subarray which will be added to $array_with_allParsedData[] in order to keep structure $array=(array(x,y..), array(x,y..))
+			      for($ix = 0; $ix < count($arrayOfNodesToGet); $ix++){
+			          if($this->checkIfArgumentIsMethod( '$post->'.$arrayOfNodesToGet[$ix])){  //if {()} is found
+					      $nodes1 = eval('return '. '$post->'.$arrayOfNodesToGet[$ix].';'  );
 					  } else {
-					      $nodes1= $post->$arrayOfNodesToGet[$i];
-				      }					   
-				
+						  //if {()} is NOT found, return without changes
+					      $nodes1= $post->$arrayOfNodesToGet[$ix];
+				     }	
+                   $subArrayWithNodes[] = $nodes1;		//$subArrayWithNodes = [x, y, etc]	, length depends on	count($arrayOfNodesToGet) 
+				  }
 				
 			   
-			          //array with parsed data
-                      $array_with_allParsedData[] = array( 
-				                $nodes1 , //eval('return '. '$post->'.$arrayOfNodesToGet[$i].';'  ),      // i.e $post->plaintext //$post->$arrayOfNodesToGet[$i]
+			          //array with parsed data, add to final array subarray with $arrayOfNodesToGet arguments. Final structure will be -> $array=(array(x,y..), array(x,y..))
+                      $array_with_allParsedData[] = //array( 
+				                $subArrayWithNodes; //$nodes1 , //eval('return '. '$post->'.$arrayOfNodesToGet[$i].';'  ),      // i.e $post->plaintext //$post->$arrayOfNodesToGet[$i]
                                 //eval('return '. '$post->'.$arrayOfNodesToGet[$int].';')    //$post->$arrayOfNodesToGet[$int] // i.e $post->next_sibling()  //mega ERROR, {$post->$arrayOfNodesToGet[1]} DOES NOT WORK ->add{()}
-				  	   ); 
+				  	  /* ); */
 					
-				  }
+				  //}
 			  
 				   //MEGA TOUGHEST PART -> should use {eval('return '. '$post->'.$arrayOfNodesToGet[$int].';')} instead of {$post->$arrayOfNodesToGet[$int]}, 
 				   // as 2nd variant will crash if the 3rd argument in function is with(), i.e array('plaintext', 'next_sibling()')
@@ -385,22 +388,41 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 		  
 		  
 		  //var_dump($array_with_allParsedData);
-          //Display CR results to Div
+		  
+		  
+		  
+		  
+          //Display CR results to Div from array $array_with_allParsedData, designed for structure $array=(array(x,y..), array(x,y..))
 		  for($i = 0; $i < count($array_with_allParsedData); $i++){  //iterats over found lements legth
           //foreach($array_with_allParsedData as $item) {
 			  
 			  //adds a  distance between 2 blocks
-			  if($i%2==0){
+			  //if($i%2==0){
 				  echo " <br> <br> ";
-			  }
+			 // }
+			 
+			 
+			 
 			  
 			  for($k = 0; $k < count($arrayOfNodesToGet); $k++){    //iterats over 3rd argument length
-                  echo "<p>" . $array_with_allParsedData[$i][$k] . "</p>";
-                  //echo $array_with_allParsedData[$i][1] .   "</p><br>";
+			       //adds border to evert second subblock, a d we we removed formatting
+			       if(!$k%2==0){  //if its the 2nd add style with border
+				       $style = "style='border:1px solid black; padding:10px;'";
+			       } else {
+				       $style = "style=''";
+			       }
+			 
+			       //check if aarray elem exists, was mostle done for testing, as prev array[x][1] was empty
+			      if(isset($array_with_allParsedData[$i][$k])){
+                      echo "<p " . $style . ">" . $array_with_allParsedData[$i][$k] . "</p>";
+                      //echo $array_with_allParsedData[$i][1] .   "</p><br>";
+				  } else {
+					  echo "<p> I am empty</p>"; 
+				  }
 			  }
 			   
 	      }		  
-		
+		//END Display CR results to Div from array $array_with_allParsedData, designed for structure $array=(array(x,y..), array(x,y..))
 		
 		
 				
@@ -415,6 +437,15 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
                 $this->myCoreFunctParseAnyResource('http://waze.zzz.com.ua/support/web/',  'div[class=accordion] h4',  array('plaintext', 'next_sibling')  );
           }
 	      */
+		  
+		  
+		  
+		 //Save array with parsed data to CVS file
+		 $CVS = new My_CVS_Save();
+		 $CVS->save_to_CVSfile($array_with_allParsedData, "cvs_files/contacts.csv", count($arrayOfNodesToGet) ); //count($arrayOfNodesToGet)-> how many elem every subarrays (array lenghth of argument $arrayOfNodesToGet passed in myCoreFunctParseAnyResource() ) 
+		  //explaination is in Classes/My_CVS_Save.php
+		  
+		  
 	
 	}
 		

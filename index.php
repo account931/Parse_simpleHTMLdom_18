@@ -147,7 +147,7 @@ session_start();
 					     echo "<br><br><br><h2><center>http://waze.zzz.com.ua/support/web</center></h2><br>";
 						 //Method to get CR's from http://waze.zzz.com.ua/support/web/
 						 $library = new My_Simple_Html_Dom();
-					     $library->myCoreFunctParseAnyResource('http://waze.zzz.com.ua/support/web/',  'div[class=accordion] h4',  array('plaintext', 'next_sibling()')  );
+					     $library->myCoreFunctParseAnyResource('http://waze.zzz.com.ua/support/web/',  'div[class=accordion] h4',  array('plaintext', 'next_sibling()->plaintext')  );
 						 //$library->b();
 						
 						 
