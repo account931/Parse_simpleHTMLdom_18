@@ -209,7 +209,10 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 	
  // Checks is argument contains{()}, we will use it later in loop to decide whethre to imply eval() or not 
 	 function checkIfArgumentIsMethod($item)
-     {
+     { 
+	    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	    //return true;// decomment this line FOR 000webhost ONLY, as this method cause error on 000webhost!!!!!!!!!!!!!!!!!!!!!!!
+		
 	   //foreach($item as $x){
 		   if (preg_match("/[(].*[)]/i", $item)) {  // if there is (),it may contain something inside or not (.*), ie it will match () and (2)
                 echo "FOUND MATCH!!!!<br>";
@@ -353,9 +356,11 @@ include('Library/simpleHTMLdom/simple_html_dom.php');	 //include ORIGINAL simple
 					      $nodes1 = eval('return '. '$post->'.$arrayOfNodesToGet[$ix].';'  );
 					  } else {
 						  //if {()} is NOT found, return without changes
-					      $nodes1= $post->$arrayOfNodesToGet[$ix];
-				     }	
-                   $subArrayWithNodes[] = $nodes1;		//$subArrayWithNodes = [x, y, etc]	, length depends on	count($arrayOfNodesToGet) 
+					      $nodes1 = $post->$arrayOfNodesToGet[$ix];
+						  echo "<br> IT-> ".$nodes1;
+				     }
+					 
+                     array_push($subArrayWithNodes, $nodes1); //$subArrayWithNodes[] = $nodes1;		//$subArrayWithNodes = [x, y, etc]	, length depends on	count($arrayOfNodesToGet) 
 				  }
 				
 			   
