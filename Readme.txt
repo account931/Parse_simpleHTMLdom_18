@@ -1,4 +1,8 @@
-App to parse web content
+Application to parse web content.
+
+#This working test application moved from zzz to {http://dimmm931.000webhostapp.com/parse_simplehtmldom_18} as zzz.com.ua does not support cURL php.
+# 000webhostapp uses the same code as localhost except for /Classes/My_Simple_Html_Dom.php->  function checkIfArgumentIsMethod($item) is deactivated on 000webhost by {return true;} as it causes crash. Technically, sometimes function myCoreFunctParseAnyResource() causes some malfunction, so u can always use manual{function parseKorrespondentAtricles()} or write a similar manual non-universal fuction for any other web page parsed. 
+
 
 # function myCoreFunctParseAnyResource($myURL, $myTargetDiv, $arrayOfNodesToGet ) is CORE UNIVERSAL, gets info from anywhere, just call it with 3 relevant arguments
 # myCoreFunctParseAnyResource arguments($myURL = url to parse, $myTargetDiv = what div to find for start parsing, $arrayOfNodesToGet = from what web page's nodes  we have to parse content and add it to array)

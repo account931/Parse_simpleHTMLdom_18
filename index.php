@@ -54,7 +54,7 @@ session_start();
 		     
 			 <img id ="wLogo2" src="" style="width:44%;"/>
 			 <br>
-			 <?php date_default_timezone_set("Europe/Kyiv"); ?>
+			 <?php date_default_timezone_set("Europe/Kiev"); ?>
 			 
 			 
 		 </h1> 
@@ -130,7 +130,7 @@ session_start();
 				      <?php
 					     echo "<br><br></br><h2><center>Get articles from https://korrespondent.net/ukraine/</center></h2><br>";
 						 //Method to get articles from Korrespondent
-					     //My_Simple_Html_Dom::parseKorrespondentAtricles();  //works!!!
+					     //My_Simple_Html_Dom::parseKorrespondentAtricles();  //works both on local and 000webhost!!!
 					  ?>
 				  </div> <!-- END class="row trainResult">-->
 				  <!---------------------------------------Parse  result2-------------------------------------------------------------------->
@@ -152,7 +152,7 @@ session_start();
 						
 						 
 						 //working Korrespondent example below, just have to fix in {foreach($items_CR as $post) { array( $post->$arrayOfNodesToGet[$i] +(0) ,$post->$arrayOfNodesToGet[$int](2) }
-						 //$library->myCoreFunctParseAnyResource('https://korrespondent.net/ukraine/',  'div[class=article_rubric_top]',  array('children(0)', 'children(2)',  'children(3)', 'children(1)->children(1)' )  );  
+						 $library->myCoreFunctParseAnyResource('https://korrespondent.net/ukraine/',  'div[class=article_rubric_top]',  array('children(0)', 'children(2)',  'children(3)', 'children(1)->children(1)' )  );  
 						 
 					  ?>
 				  </div> <!-- END class="row trainResult">-->
